@@ -1,0 +1,159 @@
+<h1>SASS tips - 1: Presentational Semantics: Semantic classes in your markup, presentational classes in your SASS</h1>
+<p>If you've used SASS at all, you may be familiar with its wonderful <code>@extend</code> function. If not, here's a quick rundown. <code>@extend</code> takes a leaf from
+object-orientated programming and allows you to make a CSS rule 'inherit' all the properties of another. Make sense? So you might write the following:
+
+</p>
+<pre class="css">.circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 100px 100px;
+}
+
+.sun {
+    @extend .circle;
+
+    background: yellow;
+}</pre>
+<p>Which SASS would compile into regular CSS as follows:
+
+</p>
+<pre class="css">.circle,
+.sun {
+    width: 200px;
+    height: 200px;
+    border-radius: 100px 100px;
+}
+
+.sun {
+    background: yellow;
+}</pre>
+<p>The advantage of using @extend here is that you can look at the ruleset for .sun and instantly tell what it's supposed to achieve - it's a circle, with a yellow background. This is what I mean by <em>presentational semantics</em> - the ability to write class names that represent exactly what they achieve.
+
+
+</p>
+<h2>Semantic classes in your markup, presentational classes in your SASS</h2>
+<p>So how can we use this to write better HTML and CSS? With the rise of CSS frameworks over the last few years, it's not unusual to see the following
+when looking at the source of a web page:
+
+</p>
+<pre class="html">&lt;section class="primary eight columns"&gt;
+    ...some content
+&lt;/section&gt;
+
+&lt;aside class="secondary two columns"&gt;
+    ...some secondary content
+&lt;/aside&gt;</pre>
+<p>We all know this is <strong>bad</strong>, but sometimes using a framework is quicker and easier than doing "the right thing", especially when it comes to grids.
+Sometimes it feels like designing with tables again, and I'll cover managing grids using SASS to avoid this in another post. So what's the <strong>right</strong> way to do this?
+In vanilla CSS, you might write:
+
+</p>
+<pre class="css">,primary,
+.secondary {
+    float: left;
+}
+.primary {
+    width: 80%;
+}
+.secondary {
+    width: 20%;
+}</pre>
+<p>But when you need to apply grid sizes to a large number of different elements, your CSS file could get messy and unreadable, fast. Instead, with SASS:
+
+</p>
+<pre class="css">/* Base grid classes */
+.columns {
+    float: left;
+}
+.columns-eight {
+    width: 80%;
+}
+.columns-two {
+    width: 20%;
+}
+
+/* Main layout */
+.primary {
+    @extend .columns;
+    @extend .columns-eight;
+}
+.secondary {
+    @extend .columns;
+    @extend .columns-eight;
+}</pre>
+<p>And, in fact, we can go one better - <code>@extend</code> supports chaining:
+
+</p>
+<pre class="css">/* Base grid classes */
+.columns {
+    float: left;
+}
+.columns-eight,
+.columns-two {
+    @extend .columns;
+}
+.columns-eight {
+    width: 80%;
+}
+.columns-two {
+    width: 20%;
+}
+
+/* Main layout */
+.primary {
+    @extend .columns-eight;
+}
+.secondary {
+    @extend .columns-two;
+}</pre>
+<p>So <code>.columns-eight</code> and <code>.columns-two</code> inherit the floating behaviour from <code>.columns</code>, and <code>.primary</code> and <code>.secondary</code> inherit that floating behaviour <em>and</em> their width from the <code>.columns-eight</code> and <code>.columns-two</code> classes, respectively. 
+
+</p>
+<p>But grids are pretty boring, and you'll probably want to use a library like <a href="http://susy.oddbird.net/">SUSY</a> to handle them, rather than inventing a very complex wheel.
+Instead, why not gleefully write all those presentational classes you've secretly wanted to write (and perhaps have written!) over the years:
+
+</p>
+<pre class="css">.big-red-box {
+    border-radius: 5px;
+    border: 2px solid red
+    background: #ffee00;
+    font-size: 20px;
+}
+
+.drop-shadow {
+    box-shadow: 0 0 5px #000;
+}</pre>
+<p>and simply assign them to the elements you like with <code>@extend</code>:
+
+</p>
+<pre class="css">.message {
+    @extend .big-red-box;
+    @extend .drop-shadow;
+}</pre>
+<p>meaning you avoid this:
+
+</p>
+<pre class="html">&lt;div class="message big-red-box drop-shadow"&gt;
+    SASS rocks!
+&lt;/div&gt;</pre>
+<p>and can instead just write this:
+
+</p>
+<pre class="html">&lt;div class="message"&gt;
+    SASS rocks!
+&lt;/div&gt;</pre>
+<p>Isn't that awesome? One of my favourite uses of <code>@extend</code> is adding the 'clearfix' hack to elements - no more class="cf" all over my beautiful markup!
+
+</p>
+<p>One of the most overlooked implications is the re-skinnability (totally a word) that this approach affords a project. If you've built an app or product
+which you want to theme/style completely differently depending on who you're selling it to, you don't have to worry about presentational classes in the markup
+getting in the way - you can potentially keep the exact same markup and just change your SASS, and by, a-ha, extension, your CSS. It also makes 'reskins'
+of websites twelve months down the line a lot easier!
+
+</p>
+<h1>Go forth and <code>@extend</code>!</h1>
+<p>Of course, as with all SASS, you could do this with regular CSS, but why would you? SASS means you can structure your CSS in an object-oriented way, which is
+great if you're following an OOCSS pattern like Jonathan Snook's <a href="http://smacss.com/">SMACSS</a>. Go ahead and be free to write beautifully semantic markup
+without any horrible presentation classes, but keep those <em>presentational semantics</em> visible in your SASS.
+
+</p>

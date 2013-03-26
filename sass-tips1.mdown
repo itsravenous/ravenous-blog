@@ -27,11 +27,11 @@ Which SASS would compile into regular CSS as follows:
 		background: yellow;
 	}
 	
-The advantage of using `@extend` here is that you can look at the ruleset for `.sun` and instantly tell what it's supposed to achieve
-- it's a circle, with a yellow background.
+The advantage of using @extend here is that you can look at the ruleset for .sun and instantly tell what it's supposed to achieve - it's a circle, with a yellow background. This is what I mean by *presentational semantics* - the ability to write class names that represent exactly what they achieve.
 
 
-But how can we use this to write better HTML and CSS? With the rise of CSS frameworks over the last few years, it's not unusual to see the following
+##Semantic classes in your markup, presentational classes in your SASS##
+So how can we use this to write better HTML and CSS? With the rise of CSS frameworks over the last few years, it's not unusual to see the following
 when looking at the source of a web page:
 
 	<section class="primary eight columns">
@@ -148,7 +148,7 @@ getting in the way - you can potentially keep the exact same markup and just cha
 of websites twelve months down the line a lot easier!
 
 # Go forth and `@extend`! #
-Of course you could do this with regular CSS, but why would you? SASS means you can structure your CSS in an object-oriented way, which is
+Of course, as with all SASS, you could do this with regular CSS, but why would you? SASS means you can structure your CSS in an object-oriented way, which is
 great if you're following an OOCSS pattern like Jonathan Snook's [SMACSS](http://smacss.com/). Go ahead and be free to write beautifully semantic markup
-without any horrible presentation classes, but keep what I'm going to call **presentational semantics** visible in your SASS.
+without any horrible presentation classes, but keep those *presentational semantics* visible in your SASS.
 
